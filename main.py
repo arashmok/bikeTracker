@@ -1,4 +1,5 @@
 import machine
+from machine import Pin
 import math
 import network
 import os
@@ -40,9 +41,12 @@ l76 = L76GNSS(py, timeout=30)
 # os.mount(sd, '/sd')
 # f = open('/sd/gps-record.txt', 'w')
 
-while (True):
+def pin_handler(arg):
     coord = l76.coordinates()
-    print("Sending ON")
+    print("got an interrupt in pin %s" % (arg.id()))
     client.publish(topic="/pycom/test", msg="{} - {} - {}".format(coord, rtc.now(), gc.mem_free()))
     # f.write("{} - {}\n".format(coord, rtc.now()))
     # print("{} - {} - {}".format(coord, rtc.now(), gc.mem_free()))
+
+p_in = Pin('P14', mode=Pin.IN, pull=Pin.PULL_UP)
+p_in.callback(Pin.IRQ_FALLING | Pin.IRQ_RISING, pin_handler)
