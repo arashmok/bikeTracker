@@ -49,4 +49,4 @@ def pin_handler(arg):
     # print("{} - {} - {}".format(coord, rtc.now(), gc.mem_free()))
 
 p_in = Pin('P14', mode=Pin.IN, pull=Pin.PULL_UP)
-p_in.callback(Pin.IRQ_FALLING | Pin.IRQ_RISING, pin_handler)
+p_in.callback(Pin.IRQ_FALLING, pin_handler)
